@@ -24,22 +24,26 @@
         const revealedTexts = new Set(); // Track revealed texts
 
         function checkPassword() {
-            const inputPassword = document.getElementById('password').value;
+            const inputPassword = document.getElementById('password').value.toLowerCase();
             const outputDiv = document.getElementById('output');
 
-            if (passwords[inputPassword]) {
-                // Check if this text has already been revealed
-                if (!revealedTexts.has(inputPassword)) {
-                    revealedTexts.add(inputPassword); // Mark as revealed
-                    outputDiv.className = '';
-                    outputDiv.innerHTML += `<div class="popup">${passwords[inputPassword]}</div>`;
-                    outputDiv.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to the output
-                } else {
-                    alert('This problem has already been revealed.');
+            // Iterate over stored passwords to perform a case-insensitive comparison
+            for (const key in passwords) {
+                if (key.toLowerCase() === inputPassword) {
+                    // Check if this text has already been revealed
+                    if (!revealedTexts.has(key.toLowerCase())) {
+                        revealedTexts.add(key.toLowerCase()); // Mark as revealed
+                        outputDiv.className = '';
+                        outputDiv.innerHTML += `<div class="popup">${passwords[key]}</div>`;
+                        outputDiv.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to the output
+                    } else {
+                        alert('This problem has already been revealed.');
+                    }
+                    return; // Stop once a match is found
                 }
-            } else {
-                alert('Incorrect password!');
             }
+
+            alert('Incorrect password!');
         }
 
         function addToPassword(char) {
