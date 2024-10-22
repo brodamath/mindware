@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Editor for Problems</title>
+    <script>
+        let jsonData = {};
+        let problemKeys = [];
+
+        // Load the JSON file (locally)
+        async function loadJSONFile(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                return;
+            }
+
+            try {
+                const text = await file.text();
+                jsonData = JSON.parse(text);
+                problemKeys = Object.keys(jsonData.problems);
+
+                // Populate the input fields with the existing values
+                for (let i = 0; i < problemKeys.length; i++) {
+                    document.getElementById(`password${i + 1}`).value = problemKeys[i];
+                    document.getElementById(`problem${i + 1}`).value = jsonData.problems[problemKeys[i]];
+                }
+            } catch (error) {
+                alert("Error loading JSON: " + error);
+            }
+        }
+
+        function saveJSON() {
+            // Update the jsonData object with values from the input fields
+            const updatedProblems = {};
+            for (let i = 0; i < problemKeys.length; i++) {
+                const password = document.getElementById(`password${i + 1}`).value;
+                const problem = document.getElementById(`problem${i + 1}`).value;
+                updatedProblems[password] = problem;
+            }
+            jsonData.problems = updatedProblems;
+
+            // Convert jsonData to a blob and create a downloadable link
+            const jsonString = JSON.stringify(jsonData, null, 4);
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "problems.json";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .password-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .password-row input[type="text"] {
+            flex: 1; /* Distribute evenly across the row */
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Problems JSON</h1>
+    <p>Load the existing <strong>problems.json</strong> file to edit the contents:</p>
+    <input type="file" id="fileInput" accept=".json" onchange="loadJSONFile(event)">
+    
+    <h2>Update Passwords and Problems</h2>
+
+    <div class="password-row">
+        <label for="password1">Password 1:</label>
+        <input type="text" id="password1">
+
+        <label for="password2">Password 2:</label>
+        <input type="text" id="password2">
+
+        <label for="password3">Password 3:</label>
+        <input type="text" id="password3">
+
+        <label for="password4">Password 4:</label>
+        <input type="text" id="password4">
+    </div>
+
+    <label for="problem1">Problem 1:</label>
+    <textarea id="problem1" rows="3"></textarea>
+
+    <label for="problem2">Problem 2:</label>
+    <textarea id="problem2" rows="3"></textarea>
+
+    <label for="problem3">Problem 3:</label>
+    <textarea id="problem3" rows="3"></textarea>
+
+    <label for="problem4">Problem 4:</label>
+    <textarea id="problem4" rows="3"></textarea>
+
+    <button onclick="saveJSON()">Save Updated JSON</button>
+</body>
+</html>
