@@ -22,22 +22,57 @@
 
                 // Populate the input fields with the existing values
                 for (let i = 0; i < problemKeys.length; i++) {
-                    document.getElementById(`password${i + 1}`).value = problemKeys[i];
-                    document.getElementById(`problem${i + 1}`).value = jsonData.problems[problemKeys[i]];
+                    createProblemInput(i + 1, problemKeys[i], jsonData.problems[problemKeys[i]]);
                 }
             } catch (error) {
                 alert("Error loading JSON: " + error);
             }
         }
 
+        // Function to create password and problem fields
+        function createProblemInput(index, password = "", problem = "") {
+            const container = document.getElementById('problem-container');
+
+            // Create password input
+            const passwordLabel = document.createElement('label');
+            passwordLabel.setAttribute('for', `password${index}`);
+            passwordLabel.innerText = `Password ${index}:`;
+            container.appendChild(passwordLabel);
+
+            const passwordInput = document.createElement('input');
+            passwordInput.type = 'text';
+            passwordInput.id = `password${index}`;
+            passwordInput.value = password;
+            container.appendChild(passwordInput);
+
+            // Create problem textarea
+            const problemLabel = document.createElement('label');
+            problemLabel.setAttribute('for', `problem${index}`);
+            problemLabel.innerText = `Problem ${index}:`;
+            container.appendChild(problemLabel);
+
+            const problemTextarea = document.createElement('textarea');
+            problemTextarea.id = `problem${index}`;
+            problemTextarea.rows = 3;
+            problemTextarea.value = problem;
+            container.appendChild(problemTextarea);
+
+            container.appendChild(document.createElement('br'));
+        }
+
+        // Save updated JSON file
         function saveJSON() {
-            // Update the jsonData object with values from the input fields
             const updatedProblems = {};
-            for (let i = 0; i < problemKeys.length; i++) {
-                const password = document.getElementById(`password${i + 1}`).value;
-                const problem = document.getElementById(`problem${i + 1}`).value;
+            const container = document.getElementById('problem-container');
+            const inputs = container.querySelectorAll('input[type="text"]');
+            const textareas = container.querySelectorAll('textarea');
+
+            for (let i = 0; i < inputs.length; i++) {
+                const password = inputs[i].value;
+                const problem = textareas[i].value;
                 updatedProblems[password] = problem;
             }
+
             jsonData.problems = updatedProblems;
 
             // Convert jsonData to a blob and create a downloadable link
@@ -49,6 +84,12 @@
             a.download = "problems.json";
             a.click();
             URL.revokeObjectURL(url);
+        }
+
+        // Add new password and problem fields
+        function addNewProblem() {
+            const newIndex = document.querySelectorAll('input[type="text"]').length + 1;
+            createProblemInput(newIndex);
         }
     </script>
     <style>
@@ -66,14 +107,15 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            margin-right: 10px;
         }
         .password-row {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
-        .password-row input[type="text"] {
-            flex: 1; /* Distribute evenly across the row */
+        #problem-container {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -81,35 +123,13 @@
     <h1>Edit Problems JSON</h1>
     <p>Load the existing <strong>problems.json</strong> file to edit the contents:</p>
     <input type="file" id="fileInput" accept=".json" onchange="loadJSONFile(event)">
-    
+
     <h2>Update Passwords and Problems</h2>
-
-    <div class="password-row">
-        <label for="password1">Password 1:</label>
-        <input type="text" id="password1">
-
-        <label for="password2">Password 2:</label>
-        <input type="text" id="password2">
-
-        <label for="password3">Password 3:</label>
-        <input type="text" id="password3">
-
-        <label for="password4">Password 4:</label>
-        <input type="text" id="password4">
+    <div id="problem-container">
+        <!-- Passwords and problems will be dynamically added here -->
     </div>
 
-    <label for="problem1">Problem 1:</label>
-    <textarea id="problem1" rows="3"></textarea>
-
-    <label for="problem2">Problem 2:</label>
-    <textarea id="problem2" rows="3"></textarea>
-
-    <label for="problem3">Problem 3:</label>
-    <textarea id="problem3" rows="3"></textarea>
-
-    <label for="problem4">Problem 4:</label>
-    <textarea id="problem4" rows="3"></textarea>
-
+    <button onclick="addNewProblem()">Add New Password & Problem</button>
     <button onclick="saveJSON()">Save Updated JSON</button>
 </body>
 </html>

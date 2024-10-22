@@ -1,3 +1,6 @@
 {
-    "problems": {}
+    "problems": {
+        "test": "problem1",
+        "asdf": "asdf"
+    }
 }
