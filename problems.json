@@ -1,0 +1,8 @@
+{
+    "problems": {
+        "1234": "Beginner: ",
+        "SECRET": "Intermediate: ",
+        "PASSWORD": "Advanced: ",
+        "CHALLENGE": "Challenge: "
+    }
+}

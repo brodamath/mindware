@@ -4,50 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>4.4 - Exterior Angle Sum</title>
-<script>
-    const passwords = {
-        '1234': 'Beginner: How many gondolas will the Ferris wheel have if each exterior angle formed between two adjacent gondolas is 30 degrees?',
-        'SECRET': 'Intermediate: Given that the Ferris wheel has 12 gondolas equally spaced around it, calculate the measure of each exterior and interior angle formed at the center of the wheel between adjacent gondolas.',
-        'PASSWORD': 'Advanced: The engineers decide to increase the number of gondolas so that each interior angle formed between adjacent gondolas is 15 degrees larger than it was with 12 gondolas. How many gondolas does the Ferris wheel now have?',
-        'CHALLENGE': 'Challenge: For the final design, the engineers want the **sum of the measures of all the interior angles** of the polygon (Ferris wheel) to be 270 degrees more than the sum when the wheel had 12 gondolas. How many gondolas are in the final design?' 
-    };
+    <script>
+        let passwords = {};
+        const revealedTexts = new Set(); // Track revealed texts
 
-    const revealedTexts = new Set(); // Track revealed texts
-
-    function checkPassword() {
-        const inputPassword = document.getElementById('password').value;
-        const outputDiv = document.getElementById('output');
-
-        if (passwords[inputPassword]) {
-            // Check if this text has already been revealed
-            if (!revealedTexts.has(inputPassword)) {
-                revealedTexts.add(inputPassword); // Mark as revealed
-                outputDiv.className = '';
-                outputDiv.innerHTML += `<div class="popup">${passwords[inputPassword]}</div>`;
-                outputDiv.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to the output
-            } else {
-                alert('This problem has already been revealed.');
+        // Load JSON data
+        async function loadProblems() {
+            try {
+                const response = await fetch('problems.json'); // Fetch the JSON file
+                const data = await response.json(); // Convert to JSON
+                passwords = data.problems; // Store the data
+            } catch (error) {
+                console.error('Error loading problems:', error);
             }
-        } else {
-            alert('Incorrect password!');
         }
-    }
 
-    function addToPassword(char) {
-        const passwordInput = document.getElementById('password');
-        passwordInput.value += char;
-    }
+        // Call the load function when the page loads
+        window.onload = loadProblems;
 
-    function clearPassword() {
-        document.getElementById('password').value = '';
-    }
+        function checkPassword() {
+            const inputPassword = document.getElementById('password').value;
+            const outputDiv = document.getElementById('output');
 
-    document.getElementById('password').addEventListener('keypress', function (event) {
-        if (event.key === 'Enter') {
-            checkPassword();
+            if (passwords[inputPassword]) {
+                // Check if this text has already been revealed
+                if (!revealedTexts.has(inputPassword)) {
+                    revealedTexts.add(inputPassword); // Mark as revealed
+                    outputDiv.className = '';
+                    outputDiv.innerHTML += `<div class="popup">${passwords[inputPassword]}</div>`;
+                    outputDiv.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll to the output
+                } else {
+                    alert('This problem has already been revealed.');
+                }
+            } else {
+                alert('Incorrect password!');
+            }
         }
-    });
-</script>
+
+        function addToPassword(char) {
+            const passwordInput = document.getElementById('password');
+            passwordInput.value += char;
+        }
+
+        function clearPassword() {
+            document.getElementById('password').value = '';
+        }
+
+        document.getElementById('password').addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
 
     <style>
         body {
@@ -113,19 +121,15 @@
     </style>
 </head>
 <body>
-
-<div id="output" class="hidden"></div>
-
-<h1>
-    Enter Code
-    <div class="input-container">
-        <input type="text" id="password" placeholder="Enter password">
-        <button onclick="checkPassword()">Submit</button>
-    </div>
-</h1>
-
-<!-- Placeholder for the keyboard -->
-<div class="keyboard">
+    <div id="output" class="hidden"></div>
+    <h1>
+        Enter Code
+        <div class="input-container">
+            <input type="text" id="password" placeholder="Enter password">
+            <button onclick="checkPassword()">Submit</button>
+        </div>
+    </h1>
+    <div class="keyboard">
     <div class="key" onclick="addToPassword('1')">1</div>
     <div class="key" onclick="addToPassword('2')">2</div>
     <div class="key" onclick="addToPassword('3')">3</div>
@@ -162,10 +166,7 @@
     <div class="key" onclick="addToPassword('X')">X</div>
     <div class="key" onclick="addToPassword('Y')">Y</div>
     <div class="key" onclick="addToPassword('Z')">Z</div>
-    <div class="key" onclick="clearPassword()">C</div>
+    <div class="key" onclick="clearPassword()">CLEAR</div>
 </div>
-
-
-
 </body>
 </html>
