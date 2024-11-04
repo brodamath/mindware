@@ -1,6 +1,8 @@
 {
     "problems": {
-        "test": "problem1",
-        "asdf": "asdf"
+        "start": "The planners are laying out a rectangular picnic area that is **30 meters long** and **20 meters wide**. What is the area of the picnic area?",
+        "pharoh": "One of the triangular flower beds has a base length of **15 meters** and an altitude (height) of **10 meters**. What is the area of this flower bed?",
+        "euclid": "A parallelogram-shaped playground has a base of **25 meters** and an altitude of **12 meters**. What is the area of the playground?",
+        "calculator": "The central pavilion is designed as a regular hexagon with each side measuring **10 meters** and an **apothem** of **8.66 meters**. Calculate the area of the pavilion."
     }
 }
