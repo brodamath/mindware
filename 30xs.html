@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Responsive Calculator Embed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 133.33%; /* Aspect ratio (800/600 = 1.3333) */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .responsive-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <iframe 
+            src="https://ti84calc.com/ti30calc" 
+            class="responsive-iframe"
+            allow="fullscreen">
+        </iframe>
+    </div>
+</body>
+</html>
